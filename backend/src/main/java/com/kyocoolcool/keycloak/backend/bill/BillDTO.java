@@ -1,16 +1,18 @@
 package com.kyocoolcool.keycloak.backend.bill;
 
+import com.kyocoolcool.keycloak.backend.member.MemberDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
 public class BillDTO {
-    private Integer id;
+    private Long billId;
 
     private String productName;
 
@@ -31,5 +33,11 @@ public class BillDTO {
     private Instant transactionTime;
 
     private Boolean deleted;
+
+    private Integer tax;
+
+    private Integer fee;
+    
+    private List<MemberDTO> members;
 
 }

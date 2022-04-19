@@ -1,18 +1,24 @@
 package com.kyocoolcool.keycloak.backend.member;
 
-import lombok.ToString;
+import com.kyocoolcool.keycloak.backend.bill.Bill;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
-@Table(name = "member")
-@ToString
-public class Member {
+@Table(name = "members")
+@Getter
+@Setter
+@NoArgsConstructor
+public class Member implements Serializable {
     @Id
-    @Column(name = "id", nullable = false, precision = 10)
+    @Column(name = "member_id", nullable = false, precision = 10)
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long memberId;
 
     @Column(name = "name", nullable = false, length = 20)
     private String name;
@@ -20,27 +26,16 @@ public class Member {
     @Column(name = "salary")
     private Integer salary;
 
-    public Integer getSalary() {
-        return salary;
-    }
+    @Column(name = "guild", length = 40)
+    private String guild;
 
-    public void setSalary(Integer salary) {
-        this.salary = salary;
-    }
+    @ManyToMany(mappedBy = "members")
+    private List<Bill> bills;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Member(Long memberId, String name, Integer salary, String guild) {
+        this.memberId = memberId;
         this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        this.salary = salary;
+        this.guild = guild;
     }
 }

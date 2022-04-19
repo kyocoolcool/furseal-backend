@@ -1,14 +1,26 @@
 package com.kyocoolcool.keycloak.backend.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kyocoolcool.keycloak.backend.bill.Bill;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "product_id", nullable = false)
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long productId;
 
     @Column(name = "name", length = 20)
     private String name;
@@ -16,27 +28,13 @@ public class Product {
     @Column(name = "price")
     private Integer price;
 
-    public Integer getPrice() {
-        return price;
-    }
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Bill> bills;
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Product(Long productId, String name, Integer price) {
+        this.productId = productId;
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.price = price;
     }
 }
