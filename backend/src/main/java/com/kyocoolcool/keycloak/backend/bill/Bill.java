@@ -6,7 +6,6 @@ import com.kyocoolcool.keycloak.backend.product.Product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,10 +16,12 @@ import java.util.List;
 @Table(name = "bills")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class Bill implements Serializable {
     @Id
+//    @SequenceGenerator(name = "billSeq", sequenceName = "bill_id", allocationSize = 1, initialValue = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "billSeq")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "bill_id", nullable = false)
     private Long billId;
 
@@ -54,14 +55,14 @@ public class Bill implements Serializable {
     @Column(name = "fee")
     private Integer fee;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(
             name = "product_id",
             referencedColumnName = "product_Id")
     @JsonIgnore
     private Product product;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
     @JoinTable(name = "bill_member",
             joinColumns = @JoinColumn(name = "bill_id", referencedColumnName = "bill_id"),
             inverseJoinColumns = @JoinColumn(name = "member_id",
@@ -92,5 +93,22 @@ public class Bill implements Serializable {
         this.deleted = deleted;
         this.gainTime = gainTime;
         this.transactionTime = transactionTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "billId=" + billId +
+                ", money=" + money +
+                ", buyer=" + buyer +
+                ", gainer=" + gainer +
+                ", way=" + way +
+                ", status=" + status +
+                ", deleted=" + deleted +
+                ", gainTime=" + gainTime +
+                ", transactionTime=" + transactionTime +
+                ", tax=" + tax +
+                ", fee=" + fee +
+                '}';
     }
 }

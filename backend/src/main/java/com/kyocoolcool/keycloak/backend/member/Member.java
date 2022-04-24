@@ -4,6 +4,7 @@ import com.kyocoolcool.keycloak.backend.bill.Bill;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(name = "members")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Member implements Serializable {
     @Id
@@ -29,7 +31,8 @@ public class Member implements Serializable {
     @Column(name = "guild", length = 40)
     private String guild;
 
-    @ManyToMany(mappedBy = "members")
+    @ManyToMany(mappedBy = "members", fetch = FetchType.EAGER)
+//    @JsonIgnore
     private List<Bill> bills;
 
     public Member(Long memberId, String name, Integer salary, String guild) {
